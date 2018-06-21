@@ -5,12 +5,16 @@
   "author": "Kevin Lazich <dev@kevinlazich.com>",
   "license": "MIT",
   "dependencies": {
+    "bcrypt": "^2.0.1",
     "body-parser": "^1.18.3",
     "compression": "^1.7.2",
     "cors": "^2.8.4",
+    "dotenv": "^6.0.0",
     "express": "^4.16.3",
     "express-jwt": "^5.3.1",
     "express-winston": "^2.5.1",
+    "mongoose": "^5.1.6",
+    "nodemon": "^1.17.5",
     "winston": "^3.0.0"
   },
   "devDependencies": {
@@ -22,9 +26,9 @@
     "lint-staged": "^7.2.0"
   },
   "scripts": {
-    "dev": "next",
-    "build": "next build",
-    "start": "next start",
+    "build": "babel src -d lib",
+    "prestart": "yarn run -s build",
+    "start": "node -r dotenv/config lib/index.js",
     "prettier": "prettier --write \"src/**/*.{js,jsx,json,css}\""
   },
   "babel": {
