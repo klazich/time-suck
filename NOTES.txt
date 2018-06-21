@@ -1,5 +1,8 @@
 https://hackernoon.com/your-node-js-authentication-tutorial-is-wrong-f1a3bf831a46
 https://getstream.io/blog/building-a-node-js-powered-api-with-express-mongoose-mongodb/
 https://medium.com/@brianalois/build-node-mongo-rest-api-2018-jwt-eff0e4f41007
+https://medium.com/of-all-things-tech-progress/5-steps-to-build-a-rest-api-in-node-js-with-mongodb-e1f2113a39bd
 
 https://www.fullstackreact.com/articles/using-create-react-app-with-a-server/
+
+http://www.syntaxsuccess.com/viewarticle/creating-a-microservice-in-nodejs
