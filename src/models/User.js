@@ -1,8 +1,7 @@
-import mongoose from 'mongoose'
+import mongoose, { Schema } from 'mongoose'
+// import timestamp from 'mongoose-timestamp'
 
-import { makeHash, verifyPassword } from '../utils/hash'
-
-const UserSchema = new mongoose.Schema({
+const UserSchema = new Schema({
   // User email property
   email: {
     type: String,
@@ -20,11 +19,7 @@ const UserSchema = new mongoose.Schema({
   },
 
   // User password property
-  password: {
-    type: String,
-    required: true,
-  },
-  passwordConfirm: {
+  passwordHash: {
     type: String,
     required: true,
   },
@@ -33,7 +28,7 @@ const UserSchema = new mongoose.Schema({
 UserSchema.pre('save', function(next) {
   const user = this
 
-  const hash = getHash(user.password)
+  const hash = makeHash(user.password)
 
   user.password = hash
 

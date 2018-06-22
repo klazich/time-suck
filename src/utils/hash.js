@@ -2,10 +2,9 @@ import argon2 from 'argon2'
 
 export async function makeHash(password) {
   try {
-    const hash = await argon2.hash(password)
-    return hash
+    return await argon2.hash(password)
   } catch (err) {
-    console.error('Internal Error!', err)
+    return console.error('Internal Error!', err)
   }
 }
 
@@ -15,6 +14,5 @@ export async function verifyPassword(hash, password) {
   } catch (err) {
     console.error('Internal Error!', err)
   }
-
   return match
 }
