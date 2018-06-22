@@ -5,6 +5,7 @@
   "author": "Kevin Lazich <dev@kevinlazich.com>",
   "license": "MIT",
   "dependencies": {
+    "argon2": "^0.19.3",
     "bcrypt": "^2.0.1",
     "body-parser": "^1.18.3",
     "compression": "^1.7.2",
