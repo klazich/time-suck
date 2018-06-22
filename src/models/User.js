@@ -1,6 +1,6 @@
 import mongoose from 'mongoose'
 
-import { getHash, checkPassword } from '../utils/hash'
+import { makeHash, verifyPassword } from '../utils/hash'
 
 const UserSchema = new mongoose.Schema({
   // User email property
