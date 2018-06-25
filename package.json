@@ -1,7 +1,7 @@
 {
   "name": "time-suck",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "lib/server.js",
   "author": "Kevin Lazich <dev@kevinlazich.com>",
   "license": "MIT",
   "dependencies": {
@@ -14,8 +14,10 @@
     "express": "^4.16.3",
     "express-jwt": "^5.3.1",
     "express-winston": "^2.5.1",
+    "jsonwebtoken": "^8.3.0",
     "mongoose": "^5.1.6",
-    "nodemon": "^1.17.5",
+    "passport": "^0.4.0",
+    "passport-local": "^1.0.0",
     "winston": "^3.0.0"
   },
   "devDependencies": {
@@ -29,7 +31,7 @@
   "scripts": {
     "build": "babel src -d lib",
     "prestart": "yarn run -s build",
-    "start": "node -r dotenv/config lib/index.js",
+    "start": "node -r dotenv/config",
     "prettier": "prettier --write \"src/**/*.{js,jsx,json,css}\""
   },
   "babel": {
