@@ -13,11 +13,14 @@
     "dotenv": "^6.0.0",
     "express": "^4.16.3",
     "express-jwt": "^5.3.1",
+    "express-session": "^1.15.6",
     "express-winston": "^2.5.1",
     "jsonwebtoken": "^8.3.0",
     "mongoose": "^5.1.6",
     "passport": "^0.4.0",
+    "passport-jwt": "^4.0.0",
     "passport-local": "^1.0.0",
+    "uuid": "^3.2.1",
     "winston": "^3.0.0"
   },
   "devDependencies": {
@@ -31,7 +34,7 @@
   "scripts": {
     "build": "babel src -d lib",
     "prestart": "yarn run -s build",
-    "start": "node -r dotenv/config",
+    "start": "node -r dotenv/config lib/server.js",
     "prettier": "prettier --write \"src/**/*.{js,jsx,json,css}\""
   },
   "babel": {
