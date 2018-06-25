@@ -17,10 +17,5 @@ https://medium.com/of-all-things-tech-progress/starting-with-authentication-a-tu
  - https://www.npmjs.com/package/speakeasy
  - https://www.npmjs.com/package/jsonwebtoken
  - https://www.npmjs.com/package/passport-local
- 
+
 https://medium.com/@evangow/server-authentication-basics-express-sessions-passport-and-curl-359b7456003d
-
-
-
-
-ARGON2

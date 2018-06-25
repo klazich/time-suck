@@ -24,14 +24,6 @@ const UserSchema = new Schema({
     },
   },
 
-  // User username property
-  username: {
-    type: String,
-    unique: true,
-    required: true,
-    trim: true,
-  },
-
   // User password property
   passwordHash: {
     type: String,
@@ -50,8 +42,9 @@ UserSchema.virtual('fullName')
     return `${this.name.first} ${this.name.last}`
   })
   .set(function(v) {
-    this.name.first = v.substr(0, v.indexOf(' '))
-    this.name.last = v.substr(v.indexOf(' ') + 1)
+    const names = v.split(' ')
+    this.name.first = names[0]
+    this.name.last = names[1]
   })
 
 // schema.pre('save', async function() {
