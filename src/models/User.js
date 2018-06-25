@@ -10,6 +10,20 @@ const UserSchema = new Schema({
     trim: true,
   },
 
+  // User name properties
+  name: {
+    first: {
+      type: String,
+      required: true,
+      trim: true,
+    },
+    last: {
+      type: String,
+      required: true,
+      trim: true,
+    },
+  },
+
   // User username property
   username: {
     type: String,
@@ -23,16 +37,26 @@ const UserSchema = new Schema({
     type: String,
     required: true,
   },
+
+  // meta
+  socialMediaHandles: {
+    type: Map,
+    of: String,
+  },
 })
 
-UserSchema.pre('save', function(next) {
-  const user = this
+UserSchema.virtual('fullName')
+  .get(function() {
+    return `${this.name.first} ${this.name.last}`
+  })
+  .set(function(v) {
+    this.name.first = v.substr(0, v.indexOf(' '))
+    this.name.last = v.substr(v.indexOf(' ') + 1)
+  })
 
-  const hash = makeHash(user.password)
-
-  user.password = hash
-
-  next()
-})
+// schema.pre('save', async function() {
+//   await doStuff();
+//   await doMoreStuff();
+// });
 
 export const User = mongoose.model('User', UserSchema)
