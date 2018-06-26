@@ -12,11 +12,19 @@ passport.use(
     async (username, password, done) => {
       try {
         const user = await User.findOne({ email: username })
-        return !user
-          ? done(null, false, { message: 'User not found' })
-          : !user.validPassword(password)
-            ? done(null, false, { message: 'Invalid credentials' })
-            : done(null, user)
+
+        // Check for user in the database
+        if (!user) {
+          return done(null, false, { message: 'User not found' })
+        }
+
+        // Validate password
+        if (!user.validPassword(password)) {
+          return done(null, false, { message: 'Invalid credentials' })
+        }
+
+        // Else, return the user object
+        return done(null, user)
       } catch (error) {
         return done(error)
       }

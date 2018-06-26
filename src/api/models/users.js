@@ -42,7 +42,7 @@ userSchema.methods = {
       const match = await argon2.verify(user.passwordHash, password)
       return match
     } catch (error) {
-      console.error('Error verifing user password', error)
+      console.error('Error verifying user password', error)
     }
   },
 
