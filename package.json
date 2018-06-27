@@ -12,6 +12,7 @@
     "cookie-parser": "^1.4.3",
     "cors": "^2.8.4",
     "dotenv": "^6.0.0",
+    "ejs": "^2.6.1",
     "express": "^4.16.3",
     "express-jwt": "^5.3.1",
     "express-session": "^1.15.6",
@@ -19,8 +20,12 @@
     "mongoose": "^5.1.6",
     "morgan": "^1.9.0",
     "passport": "^0.4.0",
+    "passport-facebook": "^2.1.1",
+    "passport-github": "^1.1.0",
+    "passport-google-oauth": "^1.0.0",
     "passport-jwt": "^4.0.0",
     "passport-local": "^1.0.0",
+    "passport-twitter": "^1.0.4",
     "uuid": "^3.2.1",
     "winston": "^3.0.0"
   },
@@ -40,27 +45,6 @@
     "preserve": "yarn run -s build",
     "prettier": "prettier --write \"src/**/*.{js,jsx,json,css}\""
   },
-  "babel": {
-    "presets": [
-      [
-        "env",
-        {
-          "targets": {
-            "node": "current"
-          }
-        }
-      ]
-    ],
-    "plugins": [
-      "transform-object-rest-spread",
-      "babel-plugin-inline-import"
-    ]
-  },
-  "prettier": {
-    "singleQuote": true,
-    "trailingComma": "es5",
-    "semi": false
-  },
   "lint-staged": {
     "src/**/*.{js,jsx,json,css}": [
       "prettier --write",
@@ -71,11 +55,5 @@
     "hooks": {
       "pre-commit": "lint-staged"
     }
-  },
-  "nodemon": {
-    "watch": [
-      "src",
-      ".env"
-    ]
   }
 }
