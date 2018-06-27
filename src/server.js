@@ -19,13 +19,15 @@ const app = express()
 
 // mongodb & mongoose ==========================================================
 
+console.log(DB_URI)
+
 // const mongooseOptions = {}
-mongoose.connect(DB_URI /* options */).then(
+mongoose.connect(DB_URI).then(
   () => {
-    console.log(` -- Connected to MongoDB at: ${DB_URI}.`)
+    console.log(`connected to mongodb service -> ${DB_URI}`)
   },
   error => {
-    console.error(` !! Could not connect to MongoDB.`, error)
+    console.error(`could not connect to a mongodb service`, error)
   }
 )
 
@@ -60,5 +62,5 @@ app.use(flash()) // use connect-flash for flash messages stored in session
 
 // launch ======================================================================
 app.listen(APP_PORT, () => {
-  console.log(` -- Server listening at: http://localhost:${APP_PORT}.`)
+  console.info(`server/auth listening on ${APP_PORT}`)
 })
