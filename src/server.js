@@ -1,5 +1,7 @@
 import 'dotenv/config' // required to Dotenv
 
+import path from 'path'
+
 import express from 'express'
 import mongoose from 'mongoose'
 import passport from 'passport'
@@ -8,59 +10,61 @@ import morgan from 'morgan'
 import cookieParser from 'cookie-parser'
 import bodyParser from 'body-parser'
 import session from 'express-session'
+import cors from 'cors'
 
-import getEnv from './getEnv'
+import getenv from './getenv'
+import config from './config'
+import initPassport from './config/passport'
 
-const APP_PORT = getEnv('APP_PORT')
-const DB_URI = getEnv('DB_URI')
-const SESSION_SECRET = getEnv('SESSION_SECRET')
+const APP_PORT = getenv('APP_PORT')
+const SESSION_SECRET = getenv('SESSION_SECRET')
 
 const app = express()
 
 // mongodb & mongoose ==========================================================
 
-console.log(DB_URI)
+mongoose
+  .connect(config.database.uri, { dbName: config.database.dbName })
+  .then(
+    () => console.log(`[server/auth] mongodb connected successfully`),
+    error =>
+      console.error(
+        `[server/auth] could not connect to a mongodb service`,
+        error
+      )
+  )
 
-// const mongooseOptions = {}
-mongoose.connect(DB_URI).then(
-  () => {
-    console.log(`connected to mongodb service -> ${DB_URI}`)
-  },
-  error => {
-    console.error(`could not connect to a mongodb service`, error)
-  }
+initPassport(passport) // pass passport for configuration
+
+app.use(morgan('dev')) // request logging
+app.use(cookieParser())
+app.use(bodyParser.json()) // application/json
+app.use(bodyParser.urlencoded({ extended: false })) // application/x-www-form-urlencoded
+app.use(cors()) // cross-origin resource sharing middleware
+
+app.set('view engine', 'ejs') // set up ejs for templating
+app.set('views', path.resolve(config.cwd, 'views'))
+
+// session middleware
+app.use(
+  session({
+    secret: SESSION_SECRET,
+    resave: true,
+    saveUninitialized: true,
+  })
 )
 
-// mongoose.connect(DB_URL) // connect to our database
-
-// require('./config/passport')(passport); // pass passport for configuration
-
-// setup the Express application
-app.use(morgan('dev')) // log every request to the console
-app.use(cookieParser()) // read cookies (needed for auth)
-app.use(bodyParser.json()) // parse application/json
-app.use(bodyParser.urlencoded({ extended: false })) // parse application/x-www-form-urlencoded
-// app.use(bodyParser.urlencoded({ extended: tru }))// support encoded bodies
-
-// app.set('view engine', 'ejs'); // set up ejs for templating
-
-// middleware - "express-session"
-const sessionOptions = {
-  secret: SESSION_SECRET,
-  resave: true,
-  saveUninitialized: true,
-}
-app.use(session(sessionOptions))
-
-// required for Passport
+// passport middleware initializing
 app.use(passport.initialize())
 app.use(passport.session()) // persistent login sessions
-app.use(flash()) // use connect-flash for flash messages stored in session
+app.use(flash()) // connect-flash to flash messages stored in session
 
 // routes ======================================================================
-// require('./app/routes.js')(app, passport) // load our routes and pass in our app and fully configured passport
+import routes from './app/routes'
+routes(app, passport) // load our routes and pass in our app and fully configured passport
 
 // launch ======================================================================
 app.listen(APP_PORT, () => {
-  console.info(`server/auth listening on ${APP_PORT}`)
+  console.log(`[server/auth] server started up successfully`)
+  console.log(`[server/auth] >>> listening on port ${APP_PORT} <<<`)
 })
