@@ -8,3 +8,5 @@
 https://github.com/sitepoint-editors/MEAN-stack-authentication
 
 https://scotch.io/tutorials/easy-node-authentication-setup-and-local
+
+https://www.sitepoint.com/local-authentication-using-passport-node-js/~
