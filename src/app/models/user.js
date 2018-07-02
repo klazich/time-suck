@@ -3,8 +3,17 @@ import argon2 from 'argon2'
 
 const userSchema = Schema({
   local: {
-    email: String,
-    password: String,
+    email: {
+      type: String,
+      unique: true,
+      index: {
+        unique: true,
+      },
+    },
+    hash: {
+      type: String,
+      default: '',
+    },
   },
   facebook: {
     id: String,
@@ -26,21 +35,24 @@ const userSchema = Schema({
   },
 })
 
+// User virtual properties
+userSchema.virtual('password').set(password => {
+  this._password = password
+  this.local.hash = this.generateHash(password)
+})
+
+// User methods
 userSchema.methods = {
-  generateHash: async password =>
-    await argon2.hash(password, { type: argon2.argon2id }),
-  validPassword: async password =>
-    await argon2.verify(this.local.password, password),
+  generateHash: async function(password) {
+    return argon2.hash(password, { type: argon2.argon2id })
+  },
+
+  authenticate: async function(password) {
+    return argon2.verify(this.local.hash, password)
+  },
 }
 
-const log = m => new Promise.resolve(console.log(m))
-
-userSchema.pre('save', async () => {
-  try {
-    await log('... saving user')
-  } catch (err) {
-    console.error(err)
-  }
-})
+// User middleware
+// userSchema.pre('save', async () => {})
 
 export default mongoose.model('User', userSchema)

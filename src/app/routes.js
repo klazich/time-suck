@@ -1,4 +1,4 @@
-const home = function(req, res) {
+const home = (req, res) => {
   res.render('index.ejs')
 }
 
@@ -12,13 +12,11 @@ const signUp = (req, res) => {
   res.render('signup.ejs', { message: req.flash('signupMessage') })
 }
 
-const profile = function(req, res) {
-  res.render('profile.ejs', {
-    user: req.user,
-  })
+const profile = (req, res) => {
+  res.render('profile.ejs', { user: req.user })
 }
 
-const logout = function(req, res) {
+const logout = (req, res) => {
   req.logout()
   res.redirect('/')
 }
@@ -32,28 +30,48 @@ const isLoggedIn = (req, res, next) => {
 }
 
 export default (app, passport) => {
-  // HOME PAGE (with login links) ========
+  // HOME PAGE ///////////////////////////////////////////////////////////////
   app.get('/', home)
 
-  // LOGIN ===============================
+  // LOGIN  //////////////////////////////////////////////////////////////////
   // show the login form
   app.get('/login', login)
 
   // process the login form
   // app.post('/login', do all our passport stuff here);
 
-  // SIGNUP ==============================
+  // SIGNUP //////////////////////////////////////////////////////////////////
   // show the signup form
   app.get('/signup', signUp)
 
   // process the signup form
   // app.post('/signup', do all our passport stuff here);
 
-  // PROFILE SECTION =====================
+  // PROFILE SECTION /////////////////////////////////////////////////////////
   // we will want this protected so you have to be logged in to visit
   // we will use route middleware to verify this (the isLoggedIn function)
   app.get('/profile', isLoggedIn, profile)
 
-  // LOGOUT ==============================
+  // LOGOUT //////////////////////////////////////////////////////////////////
   app.get('/logout', logout)
+
+  // SIGNUP FORM /////////////////////////////////////////////////////////////
+  app.post(
+    '/signup',
+    passport.authenticate('local-signup', {
+      successRedirect: '/profile',
+      failureRedirect: '/signup',
+      failurFlash: true,
+    })
+  )
+
+  // LOGIN FORM //////////////////////////////////////////////////////////////
+  app.post(
+    '/login',
+    passport.authenticate('local-login', {
+      successRedirect: '/profile',
+      failureRedirect: '/login',
+      failureFlash: true,
+    })
+  )
 }

@@ -24,7 +24,10 @@ const app = express()
 // mongodb & mongoose ==========================================================
 
 mongoose
-  .connect(config.database.uri, { dbName: config.database.dbName })
+  .connect(
+    config.database.uri,
+    { dbName: config.database.dbName }
+  )
   .then(
     () => console.log(`[server/auth] mongodb connected successfully`),
     error =>
