@@ -4,33 +4,52 @@ import User from '../app/models/user'
 
 // expose this function to our app using module.exports
 export default passport => {
-  // PASSPORT SESSION SETUP --------------------------------------------------
-  // passport needs ability to serialize and deserialize users out of session
-
+  // PASSPORT SESSION SETUP ////////////////////////////////////////////////////
   passport.serializeUser((user, done) => {
     done(null, user.id)
   })
-
   passport.deserializeUser((id, done) => {
     User.findById(id, (err, user) => {
       done(err, user)
     })
   })
 
-  // LOCAL SIGNUP ////////////////////////////////////////////////////////////
+  // LOCAL SIGNUP STRATEGY /////////////////////////////////////////////////////
   passport.use(
     'local-signup',
     new LocalStrategy(
       {
         usernameField: 'email', // override passports default lookup keys
-        passwordField: 'hash',
+        passwordField: 'password',
         passReqToCallback: true,
         // ^^^ allows us to pass back the entire request to the callback
       },
-      (req, email, password, done) => {
+      async (req, email, password, done) => {
         // User.findOne wont fire unless data is sent back
         // find a user whose email is the same as the forms email
         // we are checking to see if the user trying to login already exists
+
+        try {
+          const found = await User.findOne({ 'local.email': email })
+        } catch (error) {
+          done(
+            error,
+            false,
+            req.flash('signupMessage', 'Internal database error.')
+          )
+        }
+
+        if (found) {
+          done(
+            null,
+            false,
+            req.flash('signupMessage', 'That email is already registered.')
+          )
+        } else {
+          const newUser = new User({ local: { email } })
+          newUser.password = password
+        }
+
         User.findOne({ 'local.email': email }, (err, user) => {
           // if there are any errors, return the error
           if (err) return done(err)
@@ -48,35 +67,29 @@ export default passport => {
 
             // set the user's local credentials
             newUser.local.email = email
+            newUser.password = password
+
+            // const saved = await newUser()
+
             newUser
-              .generateHash(password)
-              .then(hash => {
-                newUser.local.hash = hash
-                console.log(hash)
+              .save()
+              .then(user => done(null, user))
+              .catch(error => {
+                throw error
               })
-              .then(() => {
-                // save the user
-                newUser
-                  .save()
-                  .then(user => done(null, user))
-                  .catch(error => {
-                    throw error
-                  })
-              })
-              .catch(err => console.error(err))
           }
         })
       }
     )
   )
 
-  // LOCAL LOGIN /////////////////////////////////////////////////////////////
+  // LOCAL LOGIN STRATEGY //////////////////////////////////////////////////////
   passport.use(
     'local-login',
     new LocalStrategy(
       {
         usernameField: 'email',
-        passwordField: 'hash',
+        passwordField: 'password',
         passReqToCallback: true,
         // ^^^ allows us to pass back the entire request to the callback
       },
