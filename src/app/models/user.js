@@ -36,9 +36,13 @@ const userSchema = Schema({
 })
 
 // User virtual properties
-userSchema.virtual('password').set(password => {
-  this._password = password
-  this.local.hash = this.generateHash(password)
+userSchema.virtual('password').set(async function(password) {
+  // this._password = password
+  console.dir(this)
+  console.log(password)
+  this.local.hash = await this.generateHash(password)
+  console.log(this.local.hash)
+  console.dir(this)
 })
 
 // User methods
