@@ -23,6 +23,8 @@ const app = express()
 
 // mongodb & mongoose ==========================================================
 
+mongoose.connection.dropDatabase()
+
 mongoose
   .connect(
     config.database.uri,
@@ -36,6 +38,8 @@ mongoose
         error
       )
   )
+
+mongoose.connection.dropDatabase()
 
 initPassport(passport) // pass passport for configuration
 
