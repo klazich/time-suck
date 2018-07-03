@@ -1,7 +1,8 @@
 import mongoose, { Schema } from 'mongoose'
 import argon2 from 'argon2'
 
-const userSchema = Schema({
+// User Schema ////////////////////////////////////////////////////////////////
+export const userSchema = Schema({
   local: {
     email: {
       type: String,
@@ -35,17 +36,12 @@ const userSchema = Schema({
   },
 })
 
-// User virtual properties
+// User Virtual Properties ////////////////////////////////////////////////////
 userSchema.virtual('password').set(async function(password) {
-  // this._password = password
-  console.dir(this)
-  console.log(password)
-  this.local.hash = await this.generateHash(password)
-  console.log(this.local.hash)
-  console.dir(this)
+  this._password = password
 })
 
-// User methods
+// User Methods ///////////////////////////////////////////////////////////////
 userSchema.methods = {
   generateHash: async function(password) {
     return argon2.hash(password, { type: argon2.argon2id })
@@ -56,7 +52,17 @@ userSchema.methods = {
   },
 }
 
-// User middleware
-// userSchema.pre('save', async () => {})
+// User Middleware ////////////////////////////////////////////////////////////
+userSchema.pre('save', async function() {
+  if (this._password) {
+    try {
+      const hash = await this.generateHash(this._password)
+      this.local.hash = hash
+    } catch (err) {
+      console.error(err)
+    }
+  }
+})
 
+// export the compiled model
 export default mongoose.model('User', userSchema)
