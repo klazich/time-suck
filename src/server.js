@@ -15,7 +15,8 @@ import errorHandler from 'errorhandler'
 
 import getenv from './getenv'
 import config from './config'
-import initPassport from './config/passport'
+import { ERROR, WARNING, SUCCESS, INFO, DEBUG, em } from './config/color'
+// import initPassport from './config/passport'
 
 // env config variables
 const APP_PORT = getenv('APP_PORT')
@@ -32,15 +33,23 @@ const app = express()
 mongoose.promise = global.Promise
 
 mongoose
-  .connect(config.database.uri, { dbName: config.database.dbName })
-  .then(() => console.log(`[server/auth] mongodb connected successfully`))
-  .catch(err =>
-    console.error(`[server/auth] could not connect to a mongodb service`, err)
-  )
-mongoose.set('debug', true)
+  .connect(config.database.uri, {
+    dbName: config.database.dbName,
+    useNewUrlParser: true,
+  })
+  .then(() => {
+    console.info(`auth/session | ${SUCCESS} Mongodb connected.
+             | └─ database server at ${em(config.database.uri)}`)
+  })
+  .catch(err => {
+    console.error(`auth/session | ${ERROR} Could not connect to a mongodb service
+      | └─ ${err.message}`)
+  })
+// mongoose.set('debug', true)
 mongoose.connection.dropDatabase() // drop existing data
 
-initPassport(passport) // pass passport for configuration
+// initPassport(passport) // pass passport for configuration
+import './config/passport/index'
 
 // Express Middleware /////////////////////////////////////////////////////////
 
@@ -78,6 +87,6 @@ routes(app, passport) // load our routes and pass in our app and fully configure
 
 // launch /////////////////////////////////////////////////////////////////////
 app.listen(APP_PORT, () => {
-  console.log(`[server/auth] server started up successfully`)
-  console.log(`[server/auth] >>> listening on port ${APP_PORT} <<<`)
+  console.log(`auth/session | ${INFO} Server started.`)
+  console.log(`             | └─ listening on port ${em(APP_PORT)}`)
 })
