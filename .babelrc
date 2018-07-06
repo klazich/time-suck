@@ -9,5 +9,9 @@
       }
     ]
   ],
-  "plugins": ["transform-object-rest-spread", "babel-plugin-inline-import"]
+  "plugins": [
+    "transform-object-rest-spread",
+    "babel-plugin-inline-import",
+    "transform-export-extensions"
+  ]
 }
