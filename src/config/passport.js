@@ -62,36 +62,57 @@ export default passport => {
         // ^^^ allows us to pass back the entire request to the callback
       },
       (req, email, password, done) => {
-        User.findOne({ 'local.email': email }, (err, user) => {
-          if (err) return done(err)
+        const userNotFound = () =>
+          done(null, false, req.flash('loginMessage', 'No user found.'))
+        const authenticationFailed = () =>
+          done(
+            null,
+            false,
+            req.flash('loginMessage', 'Incorrect email or password.')
+          )
 
-          // if no user is found, return the message
-          if (!user)
-            return done(
-              null,
-              false,
-              req.flash('loginMessage', 'No user found.')
-            )
+        User.findOne({ 'local.email': email })
+          .then(user => {
+            user
+              ? user.authenticate(password).then(authenticated => {
+                  authenticated ? done(null, user) : authenticationFailed()
+                })
+              : userNotFound()
+          })
+          .catch(err => {
+            throw err
+          })
 
-          // authenticate the password if the user was found
-          user
-            .authenticate(password)
-            .then(authenticated => {
-              authenticated
-                ? done(null, user)
-                : done(
-                    null,
-                    false,
-                    req.flash(
-                      'loginMessage',
-                      'Incorrect email or password entered.'
-                    )
-                  )
-            })
-            .catch(err => {
-              throw err
-            })
-        })
+        // User.findOne({ 'local.email': email }, (err, user) => {
+        //   if (err) return done(err)
+
+        //   // if no user is found, return the message
+        //   if (!user)
+        //     return done(
+        //       null,
+        //       false,
+        //       req.flash('loginMessage', 'No user found.')
+        //     )
+
+        //   // authenticate the password if the user was found
+        //   user
+        //     .authenticate(password)
+        //     .then(authenticated => {
+        //       authenticated
+        //         ? done(null, user)
+        //         : done(
+        //             null,
+        //             false,
+        //             req.flash(
+        //               'loginMessage',
+        //               'Incorrect email or password entered.'
+        //             )
+        //           )
+        //     })
+        //     .catch(err => {
+        //       throw err
+        //     })
+        // })
       }
     )
   )
