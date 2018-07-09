@@ -9,7 +9,7 @@ const options = {
 
 const verify = (req, email, password, done) => {
   const emailAlreadyRegistered = () =>
-    done(null, false, req.flash('signupMessage', 'Email already registered.'))
+    done(null, false, req.flash('warn', 'Email already registered.'))
 
   User.findOne({ 'local.email': email })
     .then(user => {
