@@ -1,30 +1,25 @@
-import { User } from '.'
 import { Strategy as LocalStrategy } from 'passport-local'
+
+import { findUser, createAndSaveUser } from './services'
+
+const verify = async (req, email, password, done) => {
+  try {
+    const found = await findUser(email)
+    if (found) {
+      return done(null, false, req.flash('warn', 'Email already registered.'))
+    }
+
+    const user = await createAndSaveUser(email, password)
+    return done(null, user)
+  } catch (err) {
+    return done(err)
+  }
+}
 
 const options = {
   usernameField: 'email',
   passwordField: 'password',
   passReqToCallback: true,
-}
-
-const verify = (req, email, password, done) => {
-  const emailAlreadyRegistered = () =>
-    done(null, false, req.flash('warn', 'Email already registered.'))
-
-  User.findOne({ 'local.email': email })
-    .then(user => {
-      if (user) emailAlreadyRegistered()
-      else {
-        const newUser = new User({ local: { email }, password })
-        return newUser.save()
-      }
-    })
-    .then(user => {
-      done(null, user)
-    })
-    .catch(err => {
-      throw err
-    })
 }
 
 export default new LocalStrategy(options, verify)
