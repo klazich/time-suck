@@ -1,9 +1,5 @@
 {
   "ignore": ["node_modules/", ".vscode", ".git/", "lib/"],
-  "_verbose": true,
-  "_events": {
-    "start": "node -p \"process.stdout.write('\\033c\""
-  },
   "watch": ["src"],
-  "ext": "js,json"
+  "ext": "js,json,ejs"
 }
