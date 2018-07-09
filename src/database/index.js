@@ -4,43 +4,45 @@ import config, { INFO, ERROR, SUCCESS, em } from '../config'
 
 export { User } from './models/user'
 
-const {
-  db: { host, port, name },
-} = config
-
+// MongoDB & Mongoose Setup ///////////////////////////////////////////////////
+const { db: { host, port, name } } = config
 const connectionString = `mongodb://${host}:${port}/${name}`
 const connectionOptions = {
   useNewUrlParser: true,
 }
 
-// Get Mongoose to use the global promise library
-mongoose.Promise = global.Promise
+mongoose.connect(connectionString, connectionOptions)
 
-mongoose.connect(
-  connectionString,
-  connectionOptions
-)
+if (process.env.NODE_ENV !== 'production') {
+  mongoose.set('debug', true)
+}
+
+mongoose.Promise = global.Promise // use the global promise library
+mongoose.connection.dropDatabase() // drop existing data
 
 mongoose.connection
   .on('error', err => {
-    console.error()
+    console.error(
+      `${ERROR} Could not establish a connection to MongoDB.\n└─ ${err}`
+    )
   })
-
   .on('connecting', () => {
-    console.info()
+    console.info(`${INFO} Establishing connection to MongoDB.`)
   })
-
   .on('connected', () => {
-    console.info()
+    console.info(
+      `${INFO} Default connection established to MongoDB.\n└─ database at: ${em(
+        connectionString
+      )}`
+    )
   })
-
   .on('disconnected', () => {
-    console.info()
+    console.info(`${INFO} MongoDB disconnected`)
   })
 
 const gracefulExit = () => {
   mongoose.connection.close(() => {
-    console.log()
+    console.log(`${INFO} MongoDB connections closed. Exiting process.`)
     process.exit(0)
   })
 }
