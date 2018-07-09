@@ -13,7 +13,9 @@ import cors from 'cors'
 import errorHandler from 'errorhandler'
 
 import config, { INFO, em } from './config'
-const { app: { port } } = config // env config variables
+const {
+  app: { port },
+} = config // env config variables
 
 // Initialize a new Express application
 const app = express()

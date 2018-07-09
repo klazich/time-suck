@@ -53,13 +53,15 @@ userSchema.methods = {
 }
 
 // User Middleware ////////////////////////////////////////////////////////////
-userSchema.pre('save', async function() {
+userSchema.pre('save', async function(next) {
   if (this._password) {
     try {
       const hash = await this.generateHash(this._password)
       this.local.hash = hash
+      return next()
     } catch (err) {
       console.error(err)
+      return next(err)
     }
   }
 })

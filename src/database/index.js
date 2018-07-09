@@ -5,13 +5,18 @@ import config, { INFO, ERROR, SUCCESS, em } from '../config'
 export { User } from './models/user'
 
 // MongoDB & Mongoose Setup ///////////////////////////////////////////////////
-const { db: { host, port, name } } = config
+const {
+  db: { host, port, name },
+} = config
 const connectionString = `mongodb://${host}:${port}/${name}`
 const connectionOptions = {
   useNewUrlParser: true,
 }
 
-mongoose.connect(connectionString, connectionOptions)
+mongoose.connect(
+  connectionString,
+  connectionOptions
+)
 
 if (process.env.NODE_ENV !== 'production') {
   mongoose.set('debug', true)
