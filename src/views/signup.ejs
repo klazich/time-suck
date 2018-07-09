@@ -30,7 +30,7 @@
         <% } %>
 
           <!-- LOGIN FORM -->
-          <form action="/signup" method="post">
+          <form action="<%= base %>/signup" method="post">
             <div class="form-group">
               <label>Email</label>
               <input type="text" class="form-control" name="email">
@@ -46,7 +46,7 @@
           <hr>
 
           <p>Already have an account?
-            <a href="/login">Login</a>
+            <a href="<%= base %>/login">Login</a>
           </p>
           <p>Or go
             <a href="/">home</a>.</p>
