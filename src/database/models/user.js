@@ -36,7 +36,7 @@ export const userSchema = Schema({
   },
 })
 
-// User Virtual Properties ////////////////////////////////////////////////////
+// User Virtuals //////////////////////////////////////////////////////////////
 userSchema.virtual('password').set(async function(password) {
   this._password = password
 })
@@ -64,5 +64,5 @@ userSchema.pre('save', async function() {
   }
 })
 
-// export the compiled model
+// Compile and export the User model
 export default mongoose.model('User', userSchema)
