@@ -1,4 +1,4 @@
-import 'dotenv/config' // required to Dotenv
+import 'dotenv/config' // required for Dotenv
 
 import path from 'path'
 
@@ -16,30 +16,28 @@ import errorHandler from 'errorhandler'
 import getenv from './getenv'
 import config from './config'
 import { ERROR, WARNING, SUCCESS, INFO, DEBUG, em } from './config/color'
-// import initPassport from './config/passport'
 
 // env config variables
-const APP_PORT = getenv('APP_PORT')
-const SESSION_SECRET = getenv('SESSION_SECRET')
-// production env check
-const isProduction = process.env.NODE_ENV === 'production'
+const {
+  app: { port },
+} = config
 
 // Init app
 const app = express()
 
 // mongodb & mongoose /////////////////////////////////////////////////////////
 
-//Configure mongoose's promise to global promise
-mongoose.promise = global.Promise
-
 mongoose
-  .connect(config.database.uri, {
-    dbName: config.database.dbName,
-    useNewUrlParser: true,
-  })
+  .connect(
+    config.db.uri,
+    {
+      dbName: config.db.name,
+      useNewUrlParser: true,
+    }
+  )
   .then(() => {
     console.info(`auth/session | ${SUCCESS} Mongodb connected.
-             | └─ database server at ${em(config.database.uri)}`)
+             | └─ database server at ${em(config.db.uri)}`)
   })
   .catch(err => {
     console.error(`auth/session | ${ERROR} Could not connect to a mongodb service
@@ -52,14 +50,13 @@ mongoose.connection.dropDatabase() // drop existing data
 import './config/passport/index'
 
 // Express Middleware /////////////////////////////////////////////////////////
-
 app.use(morgan('dev')) // request logging
 app.use(cookieParser())
 app.use(bodyParser.json()) // application/json
 app.use(bodyParser.urlencoded({ extended: false })) // application/x-www-form-urlencoded
 app.use(cors()) // cross-origin resource sharing middleware
 
-if (!isProduction) {
+if (process.env.NODE_ENV !== 'production') {
   app.use(errorHandler())
 }
 
@@ -69,7 +66,7 @@ app.set('views', path.resolve(config.cwd, 'views'))
 // session middleware
 app.use(
   session({
-    secret: SESSION_SECRET,
+    secret: process.env.SESSION_SECRET,
     resave: true,
     saveUninitialized: true,
   })
@@ -86,7 +83,7 @@ import routes from './app/routes'
 routes(app, passport) // load our routes and pass in our app and fully configured passport
 
 // launch /////////////////////////////////////////////////////////////////////
-app.listen(APP_PORT, () => {
+app.listen(port, () => {
   console.log(`auth/session | ${INFO} Server started.`)
-  console.log(`             | └─ listening on port ${em(APP_PORT)}`)
+  console.log(`             | └─ listening on port ${em(port)}`)
 })

@@ -13,9 +13,11 @@ const verify = (req, email, password, done) => {
 
   User.findOne({ 'local.email': email })
     .then(user => {
-      return user
-        ? emailAlreadyRegistered()
-        : User.create({ local: { email }, password })
+      if (user) emailAlreadyRegistered()
+      else {
+        const newUser = new User({ local: { email }, password })
+        return newUser.save()
+      }
     })
     .then(user => {
       done(null, user)
