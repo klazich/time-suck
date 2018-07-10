@@ -12,3 +12,11 @@ https://scotch.io/tutorials/easy-node-authentication-setup-and-local
 https://www.sitepoint.com/local-authentication-using-passport-node-js/~
 
 https://medium.com/front-end-hacking/learn-using-jwt-with-passport-authentication-9761539c4314
+
+https://gist.github.com/JonathanMH/6bd82c0954fb8f21a837ce281da4265a
+https://scotch.io/@devGson/api-authentication-with-json-web-tokensjwt-and-passport
+
+
+
+https://weechat.org/
+https://github.com/wee-slack/wee-slack
