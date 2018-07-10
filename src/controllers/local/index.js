@@ -4,15 +4,11 @@ import {
   login,
   logout,
   signup,
-  profile,
-  isLoggedIn,
   authenticateLogin,
   authenticateSignup,
 } from './services'
 
 const router = Router()
-
-router.route('/profile').get(isLoggedIn, profile)
 
 router.route('/logout').get(logout)
 

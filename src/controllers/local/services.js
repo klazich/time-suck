@@ -3,7 +3,7 @@ import passport from 'passport'
 export const login = (req, res) => {
   // render the page and pass in any flash data if it exists
   res.render('login.ejs', {
-    message: req.flash('warn'),
+    message: req.flash('message'),
     base: req.baseUrl,
   })
 }
@@ -11,29 +11,13 @@ export const login = (req, res) => {
 export const signup = (req, res) => {
   // render the page and pass in any flash data if it exists
   res.render('signup.ejs', {
-    message: req.flash('warn'),
-    base: req.baseUrl,
-  })
-}
-
-export const profile = (req, res) => {
-  // render the profile page
-  res.render('profile.ejs', {
-    message: req.flash('warn'),
-    user: req.user,
+    message: req.flash('message'),
     base: req.baseUrl,
   })
 }
 
 export const logout = (req, res) => {
   req.logout()
-  res.redirect('/')
-}
-
-export const isLoggedIn = (req, res, next) => {
-  // if user is authenticated in the session, carry on
-  if (req.isAuthenticated()) return next()
-  // if they aren't redirect them to the home page
   res.redirect('/')
 }
 
