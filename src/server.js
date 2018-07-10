@@ -23,7 +23,7 @@ import './database'
 // Setup Passport strategies
 import './passport'
 // Setup and import route controllers
-import controllers from './controllers'
+import routes from './routes'
 
 // Express Middleware /////////////////////////////////////////////////////////
 // Configure view engine to render EJS templates.
@@ -53,15 +53,15 @@ if (process.env.NODE_ENV !== 'production') {
 
 // Initialize Passport and restore authentication state, if any, from the session.
 app.use(passport.initialize())
-app.use(passport.session())
+app.use(passport.session()) // Needed for local strategy but not for JWT.
 
 app.use(flash()) // connect-flash to flash messages stored in session.
 
-// Routing ////////////////////////////////////////////////////////////////////
-app.use(controllers)
+// ROUTING ////////////////////////////////////////////////////////////////////
+app.use(routes)
 app.set('port', port)
 
-// Launch /////////////////////////////////////////////////////////////////////
+// LAUNCH /////////////////////////////////////////////////////////////////////
 app.listen(port, () => {
   console.log(
     `${INFO} Server started.\n└─ listening at: ${em(

@@ -1,18 +1,14 @@
 import { Strategy as LocalStrategy } from 'passport-local'
 
-import { findUser, createAndSaveUser } from './services'
+import { getUserByEmail, createAndSaveUser } from './services'
 
 const verify = async (req, email, password, done) => {
   try {
     // First, check if the email is already registered.
-    const found = await findUser(email)
+    const found = await getUserByEmail(email)
     if (found) {
       // Prompt user if the email is already registered.
-      return done(
-        null,
-        false,
-        req.flash('message', 'Email already registered.')
-      )
+      return done(null, false, { message: 'Email already registered.' })
     }
     // Second, create and save the new user and return it.
     const user = await createAndSaveUser(email, password)

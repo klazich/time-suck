@@ -1,5 +1,6 @@
 import mongoose, { Schema } from 'mongoose'
 import argon2 from 'argon2'
+import jwt from 'jsonwebtoken'
 
 // User Schema ////////////////////////////////////////////////////////////////
 export const userSchema = Schema({
@@ -49,6 +50,10 @@ userSchema.methods = {
 
   authenticate: async function(password) {
     return argon2.verify(this.local.hash, password)
+  },
+
+  generateToken: function() {
+    return jwt.sign(this, process.env.JWT_SECRET)
   },
 }
 

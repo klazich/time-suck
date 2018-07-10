@@ -1,20 +1,25 @@
 import passport from 'passport'
 
-import { User } from '../database'
-export { User }
+import { getUserById } from './services'
+export { User } from '../database'
 
 passport.serializeUser((user, done) => {
   done(null, user.id)
 })
 
-passport.deserializeUser((id, done) => {
-  User.findById(id, (err, user) => {
-    done(err, user)
-  })
+passport.deserializeUser(async (id, done) => {
+  try {
+    const found = await getUserById(id)
+    return done(null, found)
+  } catch (err) {
+    return done(err)
+  }
 })
 
-import localSignup from './local-signup'
-import localLogin from './local-login'
+import localSignupStrategy from './local-signup'
+import localLoginStrategy from './local-login'
+import jwtValidateStrategy from './jwt-validate'
 
-passport.use('local-signup', localSignup)
-passport.use('local-login', localLogin)
+passport.use('local-signup', localSignupStrategy)
+passport.use('local-login', localLoginStrategy)
+passport.use('jwt-validate', jwtValidateStrategy)
