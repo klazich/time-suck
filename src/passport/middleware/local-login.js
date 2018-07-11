@@ -1,6 +1,6 @@
 import { Strategy as LocalStrategy } from 'passport-local'
 
-import { getUserByEmail } from './services'
+import { getUserByEmail } from '../services'
 
 const verify = async (req, email, password, done) => {
   try {

@@ -1,6 +1,6 @@
 import { ExtractJwt, Strategy as JwtStrategy } from 'passport-jwt'
 
-import { getUserById } from './services'
+import { getUserById } from '../services'
 
 const verify = async (req, jwtPayload, done) => {
   // Find the user in db if needed. This functionality may
