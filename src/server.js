@@ -13,7 +13,9 @@ import cors from 'cors'
 import errorHandler from 'errorhandler'
 
 import config, { INFO, em } from './config'
-const { app: { port } } = config // env config variables
+const {
+  app: { port },
+} = config // env config variables
 
 // Initialize a new Express application
 const app = express()
@@ -27,7 +29,7 @@ import routes from './routes'
 
 // Express Middleware /////////////////////////////////////////////////////////
 // Configure view engine to render EJS templates.
-app.set('view engine', 'ejs') // set up ejs for templating
+app.set('view engine', 'pug') // set up pug for templating
 app.set('views', path.resolve(config.cwd, 'views'))
 
 // Use application-level middleware for common functionality, including

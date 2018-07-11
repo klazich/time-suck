@@ -12,14 +12,14 @@ router
   // HOME PAGE ////////////////////////////////////////////////////////////////
   .route('/')
   .get((req, res) => {
-    res.render('index.ejs')
+    res.render('index.pug')
   })
 
 router
   // PROFILE PAGE /////////////////////////////////////////////////////////////
   .route('/profile')
   .get(authenticationCheck, (req, res) => {
-    res.render('profile.ejs', {
+    res.render('profile.pug', {
       message: req.flash('message'),
       user: req.user,
     })
@@ -29,7 +29,7 @@ router
   // SIGNUP PAGE //////////////////////////////////////////////////////////////
   .route('/signup')
   .get((req, res) => {
-    res.render('signup.ejs', {
+    res.render('signup.pug', {
       message: req.flash('message'),
     })
   })
@@ -46,7 +46,7 @@ router
   // LOGIN PAGE ///////////////////////////////////////////////////////////////
   .route('/login')
   .get((req, res) => {
-    res.render('login.ejs', {
+    res.render('login.pug', {
       message: req.flash('message'),
     })
   })
