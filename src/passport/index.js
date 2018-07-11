@@ -16,9 +16,9 @@ passport.deserializeUser(async (id, done) => {
   }
 })
 
-import localSignupStrategy from './local-signup'
-import localLoginStrategy from './local-login'
-import jwtValidateStrategy from './jwt-validate'
+import localSignupStrategy from './middleware/local-signup'
+import localLoginStrategy from './middleware/local-login'
+import jwtValidateStrategy from './middleware/jwt-validate'
 
 passport.use('local-signup', localSignupStrategy)
 passport.use('local-login', localLoginStrategy)
