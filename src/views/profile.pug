@@ -11,6 +11,12 @@ head
       padding-top: 80px;
       word-wrap: break-word;
     }
+    .truncate {
+      width: 250px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
 
 .container
   .page-header.text-center
@@ -32,10 +38,10 @@ head
           |  Local
         p
           strong ID
-          |  #{user._id}
+            code= user._id
           br
           strong EMAIL
-          |  #{user.local.email}
+            code= user.local.email
           br
           strong HASH
-          |  #{user.local.hash}
+            code.truncate= user.local.hash
